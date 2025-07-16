@@ -7,12 +7,39 @@ class AuthApi {
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
     await this.mockDelay();
     
-    // Mock validation
+    // Check if this is a mock OAuth login
+    const isMockOAuth = credentials.password === 'mock-password';
+    
+    if (isMockOAuth) {
+      // Return mock OAuth user without userType (will be set later)
+      return {
+        user: {
+          id: credentials.email.includes('gmail') ? 'mock-google-user-123' : 'mock-apple-user-456',
+          email: credentials.email,
+          phone: '',
+          userType: 'client', // Default, will be updated after selection
+          displayName: credentials.email.includes('gmail') ? 'John Doe' : 'Jane Smith',
+          avatarUrl: credentials.email.includes('gmail') 
+            ? 'https://i.pravatar.cc/150?img=1' 
+            : 'https://i.pravatar.cc/150?img=2',
+          verified: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        tokens: {
+          accessToken: 'mock-oauth-access-token',
+          refreshToken: 'mock-oauth-refresh-token',
+          expiresIn: 3600,
+        },
+      };
+    }
+    
+    // Regular email/password login
     if (!credentials.email || !credentials.password) {
       throw new Error('Email and password are required');
     }
 
-    // Mock response
+    // Mock response for regular login
     return {
       user: {
         id: '1',

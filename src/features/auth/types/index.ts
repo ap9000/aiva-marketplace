@@ -8,6 +8,7 @@ export interface User {
   verified: boolean;
   createdAt: string;
   updatedAt: string;
+  [key: string]: any; // Allow additional properties for flexibility
 }
 
 export interface AuthTokens {

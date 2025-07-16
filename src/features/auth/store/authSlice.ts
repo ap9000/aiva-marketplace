@@ -11,6 +11,8 @@ interface AuthState {
   isLoading: boolean;
   error: string | null;
   userType: 'client' | 'va' | null;
+  isProfileComplete: boolean;
+  onboardingStep: 'user-type' | 'profile-setup' | 'completed' | null;
 }
 
 const initialState: AuthState = {
@@ -21,6 +23,8 @@ const initialState: AuthState = {
   isLoading: false,
   error: null,
   userType: null,
+  isProfileComplete: false,
+  onboardingStep: null,
 };
 
 // Async thunks
@@ -84,6 +88,20 @@ const authSlice = createSlice({
     convertGuestToUser: (state) => {
       state.isGuestMode = false;
     },
+    updateUserProfile: (state, action: PayloadAction<Partial<User> & { onboardingStep?: AuthState['onboardingStep'] }>) => {
+      const { onboardingStep, ...userUpdates } = action.payload;
+      if (state.user && Object.keys(userUpdates).length > 0) {
+        state.user = { ...state.user, ...userUpdates };
+      }
+      if (onboardingStep !== undefined) {
+        state.onboardingStep = onboardingStep;
+        state.isProfileComplete = onboardingStep === 'completed';
+      }
+    },
+    setOnboardingStep: (state, action: PayloadAction<AuthState['onboardingStep']>) => {
+      state.onboardingStep = action.payload;
+      state.isProfileComplete = action.payload === 'completed';
+    },
   },
   extraReducers: (builder) => {
     // Login
@@ -142,5 +160,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setUserType, clearError, updateUser, setGuestMode, convertGuestToUser } = authSlice.actions;
+export const { setUserType, clearError, updateUser, setGuestMode, convertGuestToUser, updateUserProfile, setOnboardingStep } = authSlice.actions;
 export default authSlice.reducer;

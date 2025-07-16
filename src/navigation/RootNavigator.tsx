@@ -12,7 +12,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 export default function RootNavigator() {
   const dispatch = useAppDispatch();
-  const { isAuthenticated, isGuestMode } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, isGuestMode, isProfileComplete, onboardingStep } = useAppSelector((state) => state.auth);
   const [isLoading, setIsLoading] = React.useState(true);
 
   useEffect(() => {
@@ -33,10 +33,13 @@ export default function RootNavigator() {
     return <Loading fullScreen text="Loading..." />;
   }
 
+  // Determine which screen to show based on auth state
+  const shouldShowMain = (isAuthenticated || isGuestMode) && (isGuestMode || isProfileComplete);
+  
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {isAuthenticated || isGuestMode ? (
+        {shouldShowMain ? (
           <Stack.Screen name="Main" component={MainNavigator} />
         ) : (
           <Stack.Screen name="Auth" component={AuthNavigator} />

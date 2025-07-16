@@ -13,6 +13,9 @@ export type AuthStackParamList = {
   Register: { userType?: 'client' | 'va' };
   Onboarding: undefined;
   AuthMethod: { method: 'google' | 'apple' };
+  UserTypeSelection: undefined;
+  ClientOnboarding: undefined;
+  VAApplication: undefined;
 };
 
 // Main Tab Navigator

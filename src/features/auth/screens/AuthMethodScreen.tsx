@@ -15,9 +15,12 @@ import { theme } from '../../../theme';
 import * as AuthSession from 'expo-auth-session';
 import * as WebBrowser from 'expo-web-browser';
 import { useAppDispatch } from '../../../store';
-import { login } from '../store/authSlice';
+import { login, updateUserProfile } from '../store/authSlice';
 
 WebBrowser.maybeCompleteAuthSession();
+
+// Development mode flag - set to true for testing without real OAuth
+const DEV_MODE = true;
 
 type Props = {
   navigation: StackNavigationProp<AuthStackParamList, 'AuthMethod'>;
@@ -55,10 +58,18 @@ export default function AuthMethodScreen({ navigation, route }: Props) {
   }, [response]);
 
   useEffect(() => {
-    if (method === 'google' && request) {
-      promptAsync();
-    } else if (method === 'apple') {
-      handleAppleLogin();
+    if (DEV_MODE) {
+      // In dev mode, simulate OAuth login
+      setTimeout(() => {
+        handleMockLogin(method);
+      }, 1500); // Simulate network delay
+    } else {
+      // Production OAuth flow
+      if (method === 'google' && request) {
+        promptAsync();
+      } else if (method === 'apple') {
+        handleAppleLogin();
+      }
     }
   }, [request, method]);
 
@@ -73,10 +84,11 @@ export default function AuthMethodScreen({ navigation, route }: Props) {
       const userInfo = await userInfoResponse.json();
       
       // In a real app, you'd send this to your backend to create/login user
-      await dispatch(login({
-        email: userInfo.email,
-        password: 'google-oauth-' + userInfo.id, // This is a placeholder
-      })).unwrap();
+      // For now, we'll simulate a successful SSO login
+      // The backend should return whether this is a new user or existing user
+      
+      // Simulating that this is a new user who needs to select their type
+      navigation.navigate('UserTypeSelection');
       
     } catch (error) {
       Alert.alert('Login Failed', 'Unable to complete Google sign in');
@@ -94,6 +106,43 @@ export default function AuthMethodScreen({ navigation, route }: Props) {
     );
   };
 
+  const handleMockLogin = async (authMethod: 'google' | 'apple') => {
+    try {
+      // Generate mock user data based on auth method
+      const mockUserData = authMethod === 'google' ? {
+        id: 'mock-google-user-123',
+        email: 'john.doe@gmail.com',
+        displayName: 'John Doe',
+        avatarUrl: 'https://i.pravatar.cc/150?img=1',
+      } : {
+        id: 'mock-apple-user-456',
+        email: 'jane.smith@icloud.com',
+        displayName: 'Jane Smith',
+        avatarUrl: 'https://i.pravatar.cc/150?img=2',
+      };
+
+      // Simulate successful authentication
+      // In a real app, this would come from your backend
+      await dispatch(login({
+        email: mockUserData.email,
+        password: 'mock-password', // This won't be used in mock mode
+      })).unwrap();
+      
+      // Update user profile with mock data
+      await dispatch(updateUserProfile({
+        ...mockUserData,
+        onboardingStep: 'user-type',
+      }));
+
+      // Navigate to user type selection
+      navigation.navigate('UserTypeSelection');
+      
+    } catch (error) {
+      Alert.alert('Mock Login Failed', 'Something went wrong with the mock login');
+      navigation.goBack();
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -101,6 +150,11 @@ export default function AuthMethodScreen({ navigation, route }: Props) {
         <Text style={styles.text}>
           {method === 'google' ? 'Connecting to Google...' : 'Connecting to Apple...'}
         </Text>
+        {DEV_MODE && (
+          <Text style={styles.devModeText}>
+            Development Mode - Using Mock Authentication
+          </Text>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -121,5 +175,11 @@ const createStyles = (isDark: boolean) => StyleSheet.create({
     marginTop: theme.spacing[3],
     fontSize: theme.fontSize.lg,
     color: isDark ? theme.colors.white : theme.colors.gray[900],
+  },
+  devModeText: {
+    marginTop: theme.spacing[2],
+    fontSize: theme.fontSize.sm,
+    color: theme.colors.warning,
+    fontStyle: 'italic',
   },
 });

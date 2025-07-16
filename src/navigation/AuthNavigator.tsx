@@ -6,6 +6,9 @@ import LoginScreen from '../features/auth/screens/LoginScreen';
 import RegisterScreen from '../features/auth/screens/RegisterScreen';
 import OnboardingScreen from '../features/auth/screens/OnboardingScreen';
 import AuthMethodScreen from '../features/auth/screens/AuthMethodScreen';
+import UserTypeSelectionScreen from '../features/auth/screens/UserTypeSelectionScreen';
+import ClientOnboardingScreen from '../features/auth/screens/ClientOnboardingScreen';
+import VAApplicationScreen from '../features/auth/screens/VAApplicationScreen';
 
 const Stack = createStackNavigator<AuthStackParamList>();
 
@@ -27,6 +30,9 @@ export default function AuthNavigator() {
       <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />
       <Stack.Screen name="AuthMethod" component={AuthMethodScreen} />
+      <Stack.Screen name="UserTypeSelection" component={UserTypeSelectionScreen} />
+      <Stack.Screen name="ClientOnboarding" component={ClientOnboardingScreen} />
+      <Stack.Screen name="VAApplication" component={VAApplicationScreen} />
     </Stack.Navigator>
   );
 }
