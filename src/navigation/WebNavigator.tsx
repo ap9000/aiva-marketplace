@@ -14,6 +14,12 @@ import ConversationsScreen from '../features/messaging/screens/ConversationsScre
 import ChatScreen from '../features/messaging/screens/ChatScreen';
 import ProfileScreen from '../features/profile/screens/ProfileScreen';
 import SettingsScreen from '../features/profile/screens/SettingsScreen';
+import ClientDashboard from '../features/dashboard/screens/ClientDashboard';
+import ProjectManagement from '../features/projects/screens/ProjectManagement';
+import HowItWorksScreen from '../features/static/screens/HowItWorksScreen';
+import PricingScreen from '../features/static/screens/PricingScreen';
+import TeamManagementScreen from '../features/team/screens/TeamManagementScreen';
+import BillingScreen from '../features/billing/screens/BillingScreen';
 import AuthModal from '../features/auth/components/AuthModal';
 
 // Define navigation params
@@ -29,6 +35,9 @@ export type WebStackParamList = {
   Profile: undefined;
   Settings: undefined;
   Dashboard: undefined;
+  ProjectManagement: undefined;
+  TeamManagement: undefined;
+  Billing: undefined;
 };
 
 const Stack = createStackNavigator<WebStackParamList>();
@@ -62,8 +71,8 @@ export default function WebNavigator() {
         {/* Public Routes */}
         <Stack.Screen name="Landing" component={LandingScreen} />
         <Stack.Screen name="Browse" component={BrowseScreen} />
-        <Stack.Screen name="HowItWorks" component={PlaceholderScreen} />
-        <Stack.Screen name="Pricing" component={PlaceholderScreen} />
+        <Stack.Screen name="HowItWorks" component={HowItWorksScreen} />
+        <Stack.Screen name="Pricing" component={PricingScreen} />
         <Stack.Screen name="VAProfile" component={VAProfileScreen} />
         <Stack.Screen name="Search" component={SearchScreen} />
         
@@ -72,7 +81,10 @@ export default function WebNavigator() {
         <Stack.Screen name="Chat" component={ChatScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
-        <Stack.Screen name="Dashboard" component={PlaceholderScreen} />
+        <Stack.Screen name="Dashboard" component={ClientDashboard} />
+        <Stack.Screen name="ProjectManagement" component={ProjectManagement} />
+        <Stack.Screen name="TeamManagement" component={TeamManagementScreen} />
+        <Stack.Screen name="Billing" component={BillingScreen} />
       </Stack.Navigator>
 
       {showAuthModal && (

@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { TestTube, Hand } from 'lucide-react-native';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/reusables/primitives/card';
 import { Button } from '../../../components/reusables/primitives/button';
 import { TalentCard } from '../../../components/reusables/laboratory/talent-card';
@@ -199,7 +200,10 @@ export function ClientDashboard() {
         {/* Header */}
         <View className="mb-6">
           <Text className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Welcome back! 🧪
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Hand size={24} color="#0A0E1A" />
+              <Text>Welcome back!</Text>
+            </View>
           </Text>
           <Text className="text-gray-600 dark:text-gray-400">
             Your AI-powered team is ready for new experiments
@@ -245,7 +249,12 @@ export function ClientDashboard() {
         <Card className="mb-8">
           <CardHeader>
             <View className="flex-row items-center justify-between">
-              <CardTitle className="text-xl">Active Experiments 🧪</CardTitle>
+              <CardTitle className="text-xl">
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                  <TestTube size={20} color="#6B46E5" />
+                  <Text>Active Experiments</Text>
+                </View>
+              </CardTitle>
               <Pressable onPress={() => navigation.navigate('Projects' as never)}>
                 <Text className="text-sm text-lab-purple font-medium">Manage</Text>
               </Pressable>

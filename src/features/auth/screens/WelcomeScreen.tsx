@@ -102,8 +102,8 @@ export default function WelcomeScreen({ navigation }: Props) {
       entering={!isWeb || isMobile ? FadeInUp.duration(800).springify() : undefined}
       style={styles.logoSection}
     >
-      <Animated.View style={[styles.logoContainer, (!isWeb || isMobile) && floatingStyle]}>
-        <Animated.View style={[styles.logoGradient, logoStyle]}>
+      <View style={styles.logoContainer}>
+        <Animated.View style={[styles.logoGradient, logoStyle, (!isWeb || isMobile) && floatingStyle]}>
           <Text style={styles.logoText}>VA</Text>
         </Animated.View>
         {!isWeb && (
@@ -122,7 +122,7 @@ export default function WelcomeScreen({ navigation }: Props) {
             ))}
           </View>
         )}
-      </Animated.View>
+      </View>
       
       <Animated.Text 
         style={styles.title}

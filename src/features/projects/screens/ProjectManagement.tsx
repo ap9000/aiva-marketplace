@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { TestTube } from 'lucide-react-native';
 import { Card, CardContent } from '../../../components/reusables/primitives/card';
 import { Button } from '../../../components/reusables/primitives/button';
 import { DataChamberInput } from '../../../components/reusables/laboratory/data-chamber-input';
@@ -286,7 +287,10 @@ export function ProjectManagement() {
       <View className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 py-4">
         <View className="flex-row items-center justify-between mb-4">
           <Text className="text-2xl font-bold text-gray-900 dark:text-white">
-            Experiment Management 🧪
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <TestTube size={24} color="#6B46E5" />
+              <Text>Experiment Management</Text>
+            </View>
           </Text>
           <Button
             label="New Project"

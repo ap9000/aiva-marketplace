@@ -127,9 +127,10 @@ export default function UserTypeSelectionScreen({ navigation }: Props) {
       <Animated.View
         key={option.type}
         entering={FadeInDown.delay(index * 200).springify()}
+        style={styles.card}
       >
         <AnimatedPressable
-          style={[styles.card, animatedStyle]}
+          style={animatedStyle}
           onPress={() => handleSelection(option.type)}
         >
         <LinearGradient
