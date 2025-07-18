@@ -133,7 +133,7 @@ export default function UserTypeSelectionScreen({ navigation }: Props) {
           onPress={() => handleSelection(option.type)}
         >
         <LinearGradient
-          colors={isSelected ? option.gradient : ['transparent', 'transparent']}
+          colors={isSelected ? option.gradient as [string, string] : ['transparent', 'transparent']}
           style={[
             styles.cardGradient,
             !isSelected && styles.cardBorder,

@@ -15,9 +15,13 @@ export const colors = {
   gray: {
     900: '#111827',       // Primary text
     700: '#374151',       // Secondary text
+    600: '#4B5563',       // Tertiary text
     500: '#6B7280',       // Disabled states
+    400: '#9CA3AF',       // Placeholder text
     300: '#D1D5DB',       // Borders
+    200: '#E5E7EB',       // Light borders
     100: '#F3F4F6',       // Backgrounds
+    50: '#F9FAFB',        // Light backgrounds
   },
   
   // Dark Mode

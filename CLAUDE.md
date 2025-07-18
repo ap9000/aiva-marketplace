@@ -5,12 +5,15 @@ AIVA Marketplace is a React Native (Expo) application that connects clients with
 
 ## Tech Stack
 - **Framework**: React Native with Expo (SDK 53)
+- **React**: Version 19.0.0
+- **React Native**: Version 0.79.5
 - **Navigation**: React Navigation v7
 - **State Management**: Redux Toolkit
 - **Authentication**: Expo Auth Session (Google/Apple SSO)
 - **Animations**: React Native Reanimated 3
 - **UI Components**: Custom components with React Native Paper
-- **Styling**: Theme-based design system with dark mode support
+- **Styling**: Native StyleSheet with theme system (no Tailwind/NativeWind)
+- **Architecture**: New Architecture enabled (`newArchEnabled: true`)
 
 ## Key Features Implemented
 1. **Modern Authentication Flow**
@@ -71,6 +74,10 @@ AIVAMarketplace/
 - ✅ Modern authentication UI implemented
 - ✅ Guest browsing enabled
 - ✅ Animations and transitions working
+- ✅ Upgraded to React 19 and latest Expo SDK
+- ✅ Converted from Tailwind/NativeWind to native StyleSheet
+- ✅ Fixed Babel plugin configuration errors
+- ✅ New Architecture enabled for better performance
 - ⚠️ OAuth credentials need configuration
 - ⚠️ Backend API integration pending
 
@@ -80,12 +87,30 @@ AIVAMarketplace/
 - **Performance**: Using React Native's New Architecture
 - **UX Laws**: Following Hick's Law, Jakob's Law for intuitive design
 
+## Recent Updates (2025-07-18)
+1. **React 19 Upgrade**
+   - Updated from React 18.3.1 to 19.0.0
+   - Updated React Native to 0.79.5
+   - Updated all type definitions to match
+
+2. **Styling System Migration**
+   - Removed NativeWind and Tailwind CSS
+   - Converted all components to use StyleSheet
+   - Fixed Babel plugin error: ".plugins is not a valid Plugin property"
+   - Removed dependencies: `nativewind`, `tailwindcss`, `class-variance-authority`, `clsx`
+
+3. **Configuration Updates**
+   - Enabled New Architecture in app.json
+   - Updated TypeScript configuration
+   - Fixed Metro bundler configuration
+
 ## Known Issues & TODOs
 1. Configure real OAuth credentials
 2. Implement backend API integration
 3. Add conversion prompts for guest users
 4. Complete VA profile features
 5. Implement real-time messaging
+6. Minor TypeScript errors in some components (doesn't affect functionality)
 
 ## Development Tips
 - Always test on both iOS and Android
@@ -98,6 +123,9 @@ AIVAMarketplace/
 - `/src/features/auth/store/authSlice.ts` - Authentication state management
 - `/src/navigation/RootNavigator.tsx` - Navigation logic including guest mode
 - `/src/theme/` - Design system configuration
+- `/src/components/ui/` - Core UI components (Button, Card, Input, etc.)
+- `/babel.config.js` - Babel configuration (simplified, no NativeWind)
+- `/metro.config.js` - Metro bundler configuration
 
 ## Git Workflow
 - Main branch: `main`
@@ -105,5 +133,29 @@ AIVAMarketplace/
 - Commit style: Conventional commits
 - Always test before committing
 
+## Troubleshooting
+
+### Common Issues
+1. **Babel Plugin Errors**
+   - Already fixed by removing NativeWind
+   - If you see ".plugins is not a valid Plugin property", check babel.config.js
+
+2. **TypeScript Errors**
+   - Most are related to removed className props (already fixed)
+   - Remaining errors don't prevent the app from running
+
+3. **Metro Bundler Issues**
+   - Run `npx expo start --clear` to clear cache
+   - Delete node_modules and reinstall if needed
+
+### Dependencies
+Key dependencies and their versions:
+- expo: ~53.0.17
+- react: 19.0.0
+- react-native: 0.79.5
+- @types/react: ~19.0.10
+- react-navigation: v7
+- react-native-reanimated: 3.17.5
+
 ---
-Last updated: 2025-01-16
+Last updated: 2025-07-18
