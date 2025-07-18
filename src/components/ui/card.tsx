@@ -1,149 +1,112 @@
 import React from 'react';
-import { View, Text, Pressable, ViewProps, TextProps, StyleSheet } from 'react-native';
-import { colors } from '../../theme/colors';
-import { shadows } from '../../theme/shadows';
+import { Card as TamaguiCard, YStack, XStack, Text, CardProps as TamaguiCardProps, YStackProps, XStackProps, TextProps } from 'tamagui';
 
-export interface CardProps extends ViewProps {
+export interface CardProps extends TamaguiCardProps {
   variant?: 'default' | 'elevated' | 'outline';
   padding?: 'none' | 'sm' | 'default' | 'lg';
   onPress?: () => void;
 }
 
-export const Card = React.forwardRef<View, CardProps>(
-  ({ variant = 'default', padding = 'default', onPress, children, style, ...props }, ref) => {
-    const variantStyle = getVariantStyles(variant);
-    const paddingStyle = getPaddingStyles(padding);
+export const Card = React.forwardRef<any, CardProps>(
+  ({ variant = 'default', padding = 'default', onPress, children, ...props }, ref) => {
+    const variantStyles = {
+      default: {
+        borderWidth: 1,
+        borderColor: '$borderColor',
+        shadowColor: '$shadowColor',
+        shadowOpacity: 0.05,
+        shadowRadius: 2,
+      },
+      elevated: {
+        shadowColor: '$shadowColor',
+        shadowOpacity: 0.1,
+        shadowRadius: 8,
+        elevation: 4,
+      },
+      outline: {
+        borderWidth: 2,
+        borderColor: '$borderColor',
+      },
+    };
+
+    const paddingValues = {
+      none: '$0',
+      sm: '$3',
+      default: '$4',
+      lg: '$6',
+    };
     
-    const content = (
-      <View
+    return (
+      <TamaguiCard
         ref={ref}
-        style={[styles.base, variantStyle, paddingStyle, style]}
+        padding={paddingValues[padding]}
+        borderRadius="$3"
+        backgroundColor="$background"
+        onPress={onPress}
+        pressStyle={onPress ? { opacity: 0.9 } : undefined}
+        {...variantStyles[variant]}
         {...props}
       >
         {children}
-      </View>
+      </TamaguiCard>
     );
-
-    if (onPress) {
-      return (
-        <Pressable onPress={onPress} style={({ pressed }) => pressed && styles.pressed}>
-          {content}
-        </Pressable>
-      );
-    }
-
-    return content;
   }
 );
 
 Card.displayName = 'Card';
 
-export const CardHeader = React.forwardRef<View, ViewProps>(
-  ({ style, ...props }, ref) => (
-    <View ref={ref} style={[styles.header, style]} {...props} />
+export const CardHeader = React.forwardRef<any, YStackProps>(
+  ({ ...props }, ref) => (
+    <YStack ref={ref} paddingBottom="$4" {...props} />
   )
 );
 
 CardHeader.displayName = 'CardHeader';
 
-export const CardTitle = React.forwardRef<
-  Text,
-  TextProps & { children: React.ReactNode }
->(({ children, style, ...props }, ref) => (
-  <Text
-    ref={ref}
-    style={[styles.title, style]}
-    {...props}
-  >
-    {children}
-  </Text>
-));
+export const CardTitle = React.forwardRef<any, TextProps>(
+  ({ children, ...props }, ref) => (
+    <Text
+      ref={ref}
+      fontSize="$6"
+      fontWeight="600"
+      color="$color"
+      {...props}
+    >
+      {children}
+    </Text>
+  )
+);
 
 CardTitle.displayName = 'CardTitle';
 
-export const CardDescription = React.forwardRef<
-  Text,
-  TextProps & { children: React.ReactNode }
->(({ children, style, ...props }, ref) => (
-  <Text
-    ref={ref}
-    style={[styles.description, style]}
-    {...props}
-  >
-    {children}
-  </Text>
-));
+export const CardDescription = React.forwardRef<any, TextProps>(
+  ({ children, ...props }, ref) => (
+    <Text
+      ref={ref}
+      marginTop="$1"
+      fontSize="$3"
+      color="$colorHover"
+      {...props}
+    >
+      {children}
+    </Text>
+  )
+);
 
 CardDescription.displayName = 'CardDescription';
 
-export const CardContent = React.forwardRef<View, ViewProps>(
-  ({ style, ...props }, ref) => (
-    <View ref={ref} style={style} {...props} />
+export const CardContent = React.forwardRef<any, YStackProps>(
+  ({ ...props }, ref) => (
+    <YStack ref={ref} {...props} />
   )
 );
 
 CardContent.displayName = 'CardContent';
 
-export const CardFooter = React.forwardRef<View, ViewProps>(
-  ({ style, ...props }, ref) => (
-    <View ref={ref} style={[styles.footer, style]} {...props} />
+export const CardFooter = React.forwardRef<any, XStackProps>(
+  ({ ...props }, ref) => (
+    <XStack ref={ref} paddingTop="$4" {...props} />
   )
 );
 
 CardFooter.displayName = 'CardFooter';
-
-const getVariantStyles = (variant: CardProps['variant']) => {
-  const variants = {
-    default: {
-      borderWidth: 1,
-      borderColor: colors.gray[300],
-      ...shadows.sm,
-    },
-    elevated: {
-      ...shadows.md,
-    },
-    outline: {
-      borderWidth: 2,
-      borderColor: colors.gray[300],
-    },
-  };
-  
-  return variants[variant || 'default'];
-};
-
-const getPaddingStyles = (padding: CardProps['padding']) => {
-  const paddings = {
-    none: { padding: 0 },
-    sm: { padding: 12 },
-    default: { padding: 16 },
-    lg: { padding: 24 },
-  };
-  
-  return paddings[padding || 'default'];
-};
-
-const styles = StyleSheet.create({
-  base: {
-    borderRadius: 8,
-    backgroundColor: colors.white,
-  },
-  pressed: {
-    opacity: 0.9,
-  },
-  header: {
-    paddingBottom: 16,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: colors.gray[900],
-  },
-  description: {
-    marginTop: 4,
-    fontSize: 14,
-    color: colors.gray[500],
-  },
-  footer: {
-    paddingTop: 16,
-  },
-});

@@ -1,26 +1,17 @@
 import React, { memo } from 'react';
 import {
-  Pressable,
-  Text,
-  StyleSheet,
   ActivityIndicator,
-  ViewStyle,
-  TextStyle,
   PressableProps,
-  Platform,
 } from 'react-native';
-import { useTheme } from '../../theme/ThemeContext';
+import { Button as TamaguiButton, ButtonProps as TamaguiButtonProps, Text } from 'tamagui';
 import { theme } from '../../theme';
 
-export interface ButtonProps extends Omit<PressableProps, 'style'> {
+export interface ButtonProps extends Omit<TamaguiButtonProps, 'variant' | 'size'> {
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   fullWidth?: boolean;
   loading?: boolean;
-  disabled?: boolean;
   title: string;
-  style?: ViewStyle;
-  textStyle?: TextStyle;
 }
 
 export const Button: React.FC<ButtonProps> = memo(({
@@ -30,144 +21,78 @@ export const Button: React.FC<ButtonProps> = memo(({
   loading = false,
   disabled = false,
   title,
-  style,
-  textStyle,
   onPress,
   ...props
 }) => {
-  const { isDark } = useTheme();
-
   const handlePress = () => {
     if (!loading && !disabled && onPress) {
-      onPress(null as any);
+      onPress();
     }
   };
 
-  const styles = createStyles(isDark);
-  
-  const buttonStyle = [
-    styles.base,
-    styles[variant],
-    styles[size],
-    fullWidth && styles.fullWidth,
-    (disabled || loading) && styles.disabled,
-    style,
-  ];
+  const variantStyles = {
+    primary: {
+      backgroundColor: '$labPurple',
+      color: '$whiteCoat',
+      hoverStyle: { backgroundColor: '$primaryHover' },
+      pressStyle: { backgroundColor: '$primaryPress' },
+    },
+    secondary: {
+      backgroundColor: '$backgroundSoft',
+      color: '$color',
+      borderWidth: 1,
+      borderColor: '$borderColor',
+      hoverStyle: { backgroundColor: '$gray4' },
+      pressStyle: { backgroundColor: '$gray5' },
+    },
+    ghost: {
+      backgroundColor: 'transparent',
+      color: '$labPurple',
+      hoverStyle: { backgroundColor: '$backgroundSoft' },
+      pressStyle: { backgroundColor: '$backgroundSoft' },
+    },
+    danger: {
+      backgroundColor: '$error',
+      color: '$whiteCoat',
+      hoverStyle: { backgroundColor: '$red10' },
+      pressStyle: { backgroundColor: '$red11' },
+    },
+  };
 
-  const textStyles = [
-    styles.text,
-    styles[`${variant}Text`],
-    styles[`${size}Text`],
-    textStyle,
-  ];
+  const sizeStyles = {
+    sm: { height: 36, paddingHorizontal: '$2', fontSize: '$3' },
+    md: { height: 44, paddingHorizontal: '$3', fontSize: '$4' },
+    lg: { height: 48, paddingHorizontal: '$4', fontSize: '$5' },
+  };
+
+  const currentVariant = variantStyles[variant];
+  const currentSize = sizeStyles[size];
 
   return (
-    <Pressable
-      style={({ pressed }) => [
-        buttonStyle,
-        pressed && !disabled && !loading && styles.pressed,
-      ]}
+    <TamaguiButton
+      {...currentVariant}
+      height={currentSize.height}
+      paddingHorizontal={currentSize.paddingHorizontal}
+      width={fullWidth ? '100%' : undefined}
+      opacity={disabled || loading ? 0.6 : 1}
       onPress={handlePress}
       disabled={disabled || loading}
+      accessibilityRole="button"
+      accessibilityState={{ disabled: disabled || loading }}
       {...props}
     >
       {loading ? (
         <ActivityIndicator 
-          color={variant === 'primary' ? theme.colors.white : theme.colors.primary.main}
-          size={size === 'sm' ? 'small' : 'small'}
+          color={variant === 'primary' || variant === 'danger' ? theme.colors.white : theme.colors.primary.main}
+          size="small"
         />
       ) : (
-        <Text style={textStyles}>{title}</Text>
+        <Text fontSize={currentSize.fontSize} fontWeight="500" color={currentVariant.color}>
+          {title}
+        </Text>
       )}
-    </Pressable>
+    </TamaguiButton>
   );
-});
-
-const createStyles = (isDark: boolean) => StyleSheet.create({
-  base: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: theme.borderRadius.md,
-    paddingHorizontal: theme.spacing[3],
-    ...Platform.select({
-      ios: theme.shadows.sm,
-      android: {},
-    }),
-  },
-  
-  // Variants
-  primary: {
-    backgroundColor: theme.colors.primary.main,
-    ...Platform.select({
-      android: theme.shadows.sm,
-    }),
-  },
-  secondary: {
-    backgroundColor: isDark ? theme.colors.dark.surface : theme.colors.gray[100],
-    borderWidth: 1,
-    borderColor: isDark ? theme.colors.dark.border : theme.colors.gray[300],
-  },
-  ghost: {
-    backgroundColor: 'transparent',
-  },
-  danger: {
-    backgroundColor: theme.colors.error,
-  },
-  
-  // Sizes
-  sm: {
-    height: theme.layout.buttonHeight.sm,
-    paddingHorizontal: theme.spacing[2],
-  },
-  md: {
-    height: theme.layout.buttonHeight.md,
-  },
-  lg: {
-    height: theme.layout.buttonHeight.lg,
-    paddingHorizontal: theme.spacing[4],
-  },
-  
-  // States
-  fullWidth: {
-    width: '100%',
-  },
-  disabled: {
-    opacity: 0.6,
-  },
-  pressed: {
-    opacity: 0.8,
-    transform: [{ scale: 0.98 }],
-  },
-  
-  // Text styles
-  text: {
-    fontFamily: theme.fontFamily.primary,
-    fontWeight: theme.fontWeight.medium,
-  },
-  primaryText: {
-    color: theme.colors.white,
-  },
-  secondaryText: {
-    color: isDark ? theme.colors.white : theme.colors.gray[900],
-  },
-  ghostText: {
-    color: theme.colors.primary.main,
-  },
-  dangerText: {
-    color: theme.colors.white,
-  },
-  
-  // Text sizes
-  smText: {
-    fontSize: theme.fontSize.sm,
-  },
-  mdText: {
-    fontSize: theme.fontSize.base,
-  },
-  lgText: {
-    fontSize: theme.fontSize.lg,
-  },
 });
 
 Button.displayName = 'Button';

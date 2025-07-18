@@ -14,6 +14,7 @@ export const colors = {
   // Neutral Colors
   gray: {
     900: '#111827',       // Primary text
+    800: '#1F2937',       // Dark gray
     700: '#374151',       // Secondary text
     600: '#4B5563',       // Tertiary text
     500: '#6B7280',       // Disabled states

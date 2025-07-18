@@ -2,6 +2,7 @@ import { colors } from './colors';
 import { typography, fontSize, fontWeight, lineHeight, fontFamily } from './typography';
 import { spacing, padding, margin, borderRadius, layout } from './spacing';
 import { shadows } from './shadows';
+import { breakpoints, maxContainerWidths } from '../shared/constants/breakpoints';
 
 export const theme = {
   colors,
@@ -16,6 +17,21 @@ export const theme = {
   borderRadius,
   layout,
   shadows,
+  breakpoints,
+  maxContainerWidths,
+  // Responsive spacing multipliers
+  responsive: {
+    spacing: {
+      mobile: 1,
+      tablet: 1.2,
+      desktop: 1.4,
+    },
+    fontSize: {
+      mobile: 1,
+      tablet: 1.05,
+      desktop: 1.1,
+    },
+  },
 };
 
 export type Theme = typeof theme;
@@ -25,3 +41,4 @@ export { colors } from './colors';
 export { typography, fontSize, fontWeight, lineHeight, fontFamily } from './typography';
 export { spacing, padding, margin, borderRadius, layout } from './spacing';
 export { shadows } from './shadows';
+export { breakpoints, maxContainerWidths } from '../shared/constants/breakpoints';

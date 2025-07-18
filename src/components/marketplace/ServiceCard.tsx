@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, Pressable } from 'react-native';
+import { YStack, XStack, Text, Image } from 'tamagui';
 import { Card, CardContent } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
@@ -36,99 +36,107 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
 }) => {
   return (
     <Card
-      variant="default"
-      className="mb-3"
       onPress={onPress}
+      animation="quick"
+      pressStyle={{ scale: 0.98 }}
     >
-      <CardContent className="p-0">
+      <CardContent padding="$0">
         {/* Thumbnail if available */}
         {service.thumbnail && (
           <Image
             source={{ uri: service.thumbnail }}
-            className="w-full h-32 rounded-t-lg"
+            width="100%"
+            height={128}
+            borderTopLeftRadius="$4"
+            borderTopRightRadius="$4"
             resizeMode="cover"
           />
         )}
         
-        <View className="p-4">
+        <YStack padding="$4">
           {/* Category Badge */}
-          <Badge variant="secondary" size="sm" className="self-start mb-2">
+          <Badge variant="secondary" size="sm" alignSelf="flex-start" marginBottom="$2">
             {service.category}
           </Badge>
           
           {/* Service Title */}
-          <Text className="text-lg font-semibold text-gray-900 mb-2">
+          <Text fontSize="$5" fontWeight="600" color="$color" marginBottom="$2">
             {service.title}
           </Text>
           
           {/* Description */}
-          <Text className="text-sm text-gray-600 mb-3" numberOfLines={2}>
+          <Text fontSize="$3" color="$colorHover" marginBottom="$3" numberOfLines={2}>
             {service.description}
           </Text>
           
           {/* Provider Info */}
-          <Pressable 
+          <XStack 
+            alignItems="center" 
+            marginBottom="$3"
+            pressStyle={{ opacity: 0.8 }}
             onPress={onProviderPress}
-            className="flex-row items-center mb-3"
           >
             <Image
               source={{ uri: service.provider.avatar }}
-              className="w-8 h-8 rounded-full bg-gray-200"
+              width={32}
+              height={32}
+              borderRadius={16}
+              backgroundColor="$backgroundSoft"
             />
-            <View className="ml-2 flex-1">
-              <View className="flex-row items-center">
-                <Text className="text-sm font-medium text-gray-900">
+            <YStack marginLeft="$2" flex={1}>
+              <XStack alignItems="center">
+                <Text fontSize="$3" fontWeight="500" color="$color">
                   {service.provider.name}
                 </Text>
                 {service.provider.isVerified && (
-                  <Badge variant="verified" size="sm" className="ml-2">
+                  <Badge variant="verified" size="sm" marginLeft="$2">
                     Verified
                   </Badge>
                 )}
-              </View>
-              <View className="flex-row items-center">
+              </XStack>
+              <XStack alignItems="center">
                 <Star size={12} color="#F59E0B" fill="#F59E0B" />
-                <Text className="text-xs text-gray-500 ml-1">
+                <Text fontSize="$2" color="$colorHover" marginLeft="$1">
                   {service.provider.rating}
                 </Text>
-              </View>
-            </View>
-          </Pressable>
+              </XStack>
+            </YStack>
+          </XStack>
           
           {/* Service Details */}
-          <View className="flex-row items-center justify-between mb-3">
-            <View className="flex-row items-center">
+          <XStack alignItems="center" justifyContent="space-between" marginBottom="$3">
+            <XStack alignItems="center">
               <Clock size={16} color="#6B7280" />
-              <Text className="text-sm text-gray-600 ml-1">
+              <Text fontSize="$3" color="$colorHover" marginLeft="$1">
                 {service.deliveryTime}
               </Text>
-            </View>
+            </XStack>
             
-            <View className="flex-row items-center">
+            <XStack alignItems="center">
               <TrendingUp size={16} color="#10B981" />
-              <Text className="text-sm text-gray-600 ml-1">
+              <Text fontSize="$3" color="$colorHover" marginLeft="$1">
                 {service.completedCount} completed
               </Text>
-            </View>
-          </View>
+            </XStack>
+          </XStack>
           
           {/* Price and Action */}
-          <View className="flex-row items-center justify-between">
-            <View className="flex-row items-center">
+          <XStack alignItems="center" justifyContent="space-between">
+            <XStack alignItems="center">
               <DollarSign size={20} color="#3B82F6" />
-              <Text className="text-xl font-bold text-primary-600">
+              <Text fontSize="$7" fontWeight="bold" color="$primary">
                 {service.price}
               </Text>
-              <Text className="text-sm text-gray-500 ml-1">
+              <Text fontSize="$3" color="$colorHover" marginLeft="$1">
                 /{service.priceType === 'hourly' ? 'hr' : 'project'}
               </Text>
-            </View>
+            </XStack>
             
             <Button size="sm" onPress={onPress}>
               View Details
             </Button>
-          </View>
-        </View>
+          </XStack>
+        </YStack>
       </CardContent>
     </Card>
   );

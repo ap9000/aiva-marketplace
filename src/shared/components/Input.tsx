@@ -1,80 +1,78 @@
 import React, { useState, forwardRef } from 'react';
 import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  ViewStyle,
   TextInputProps,
-  Platform,
   Pressable,
 } from 'react-native';
+import { YStack, XStack, Text, Input as TamaguiInput, InputProps as TamaguiInputProps } from 'tamagui';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useTheme } from '../../theme/ThemeContext';
-import { theme } from '../../theme';
 
-export interface InputProps extends TextInputProps {
+export interface InputProps extends Omit<TamaguiInputProps, 'size'> {
   label?: string;
   error?: string;
   helperText?: string;
   icon?: keyof typeof MaterialIcons.glyphMap;
-  containerStyle?: ViewStyle;
-  inputStyle?: ViewStyle;
+  size?: 'sm' | 'md' | 'lg';
   showPassword?: boolean;
 }
 
-export const Input = forwardRef<TextInput, InputProps>(({
+export const Input = forwardRef<any, InputProps>(({
   label,
   error,
   helperText,
   icon,
-  containerStyle,
-  inputStyle,
   secureTextEntry,
   showPassword: showPasswordProp,
+  size = 'md',
   ...props
 }, ref) => {
-  const { isDark } = useTheme();
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const styles = createStyles(isDark);
-
-  const inputContainerStyle = [
-    styles.inputContainer,
-    isFocused && styles.inputContainerFocused,
-    error && styles.inputContainerError,
-  ];
-
-  const textInputStyle = [
-    styles.input,
-    icon && styles.inputWithIcon,
-    inputStyle,
-  ];
-
   const isPasswordField = secureTextEntry || showPasswordProp !== undefined;
+  const borderColor = error ? '$error' : isFocused ? '$labPurple' : '$borderColor';
+
+  const sizeStyles = {
+    sm: { height: 36 },
+    md: { height: 44 },
+    lg: { height: 52 },
+  };
 
   return (
-    <View style={[styles.container, containerStyle]}>
-      {label && <Text style={styles.label}>{label}</Text>}
+    <YStack marginBottom="$2">
+      {label && (
+        <Text fontSize="$3" fontWeight="500" color="$color" marginBottom="$1">
+          {label}
+        </Text>
+      )}
       
-      <View style={inputContainerStyle}>
+      <XStack
+        borderWidth={isFocused ? 2 : 1}
+        borderColor={borderColor}
+        borderRadius="$3"
+        backgroundColor="$background"
+        alignItems="center"
+        height={sizeStyles[size].height}
+        hoverStyle={{ borderColor: '$colorHover' }}
+      >
         {icon && (
           <MaterialIcons
             name={icon}
             size={20}
-            color={error ? theme.colors.error : 
-                   isFocused ? theme.colors.primary.main : 
-                   theme.colors.gray[500]}
-            style={styles.icon}
+            color={error ? '#EF4444' : isFocused ? '#6B46E5' : '#6B7280'}
+            style={{ marginLeft: 8 }}
           />
         )}
         
-        <TextInput
+        <TamaguiInput
           ref={ref}
-          style={textInputStyle}
-          placeholderTextColor={theme.colors.gray[500]}
-          selectionColor={theme.colors.primary.main}
+          flex={1}
+          paddingHorizontal="$2"
+          paddingLeft={icon ? "$1" : "$2"}
+          fontSize="$4"
+          color="$color"
+          placeholderTextColor="$placeholderColor"
+          borderWidth={0}
+          backgroundColor="transparent"
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           secureTextEntry={isPasswordField && !showPassword}
@@ -84,91 +82,28 @@ export const Input = forwardRef<TextInput, InputProps>(({
         {isPasswordField && (
           <Pressable
             onPress={() => setShowPassword(!showPassword)}
-            style={styles.passwordToggle}
+            style={{ padding: 8 }}
           >
             <MaterialIcons
               name={showPassword ? 'visibility' : 'visibility-off'}
               size={20}
-              color={theme.colors.gray[500]}
+              color="#6B7280"
             />
           </Pressable>
         )}
-      </View>
+      </XStack>
       
       {(error || helperText) && (
-        <Text style={[styles.helperText, error && styles.errorText]}>
+        <Text 
+          fontSize="$2" 
+          marginTop="$1"
+          color={error ? "$error" : "$colorHover"}
+        >
           {error || helperText}
         </Text>
       )}
-    </View>
+    </YStack>
   );
-});
-
-const createStyles = (isDark: boolean) => StyleSheet.create({
-  container: {
-    marginBottom: theme.spacing[2],
-  },
-  
-  label: {
-    fontSize: theme.fontSize.sm,
-    fontWeight: theme.fontWeight.medium,
-    color: isDark ? theme.colors.white : theme.colors.gray[700],
-    marginBottom: theme.spacing[1],
-  },
-  
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: isDark ? theme.colors.dark.border : theme.colors.gray[300],
-    borderRadius: theme.borderRadius.md,
-    backgroundColor: isDark ? theme.colors.dark.surface : theme.colors.white,
-    height: theme.layout.inputHeight,
-  },
-  
-  inputContainerFocused: {
-    borderColor: theme.colors.primary.main,
-    borderWidth: 2,
-  },
-  
-  inputContainerError: {
-    borderColor: theme.colors.error,
-  },
-  
-  icon: {
-    marginLeft: theme.spacing[2],
-  },
-  
-  input: {
-    flex: 1,
-    paddingHorizontal: theme.spacing[2],
-    fontSize: theme.fontSize.base,
-    color: isDark ? theme.colors.white : theme.colors.gray[900],
-    fontFamily: theme.fontFamily.primary,
-    ...Platform.select({
-      web: {
-        outlineStyle: 'none',
-      },
-    }),
-  },
-  
-  inputWithIcon: {
-    paddingLeft: theme.spacing[1],
-  },
-  
-  passwordToggle: {
-    padding: theme.spacing[2],
-  },
-  
-  helperText: {
-    fontSize: theme.fontSize.xs,
-    color: theme.colors.gray[500],
-    marginTop: theme.spacing[1],
-  },
-  
-  errorText: {
-    color: theme.colors.error,
-  },
 });
 
 Input.displayName = 'Input';

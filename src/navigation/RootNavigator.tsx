@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useAppSelector, useAppDispatch } from '../store';
 import { loadStoredAuth } from '../features/auth/store/authSlice';
 import { Loading } from '../shared/components';
+import { useResponsive } from '../shared/hooks/useResponsive';
 import AuthNavigator from './AuthNavigator';
 import MainNavigator from './MainNavigator';
 import { RootStackParamList } from './types';
@@ -12,7 +13,8 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 export default function RootNavigator() {
   const dispatch = useAppDispatch();
-  const { isAuthenticated, isGuestMode, isProfileComplete, onboardingStep } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, isGuestMode, isProfileComplete } = useAppSelector((state) => state.auth);
+  const { isWeb, isDesktop } = useResponsive();
   const [isLoading, setIsLoading] = React.useState(true);
 
   useEffect(() => {
@@ -33,7 +35,18 @@ export default function RootNavigator() {
     return <Loading fullScreen text="Loading..." />;
   }
 
-  // Determine which screen to show based on auth state
+  // For web desktop, always show MainNavigator (which includes landing page)
+  if (isWeb && isDesktop) {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Main" component={MainNavigator} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
+
+  // For mobile, show auth or main based on auth state
   const shouldShowMain = (isAuthenticated || isGuestMode) && (isGuestMode || isProfileComplete);
   
   return (

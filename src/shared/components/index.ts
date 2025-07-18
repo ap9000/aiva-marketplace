@@ -12,3 +12,6 @@ export type { AvatarProps } from './Avatar';
 
 export { Loading } from './Loading';
 export { EmptyState } from './EmptyState';
+
+export { ResponsiveContainer, ResponsiveRow, ResponsiveColumn } from './ResponsiveContainer';
+export type { ResponsiveContainerProps } from './ResponsiveContainer';

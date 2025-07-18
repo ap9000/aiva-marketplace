@@ -1,15 +1,10 @@
 import React, { memo } from 'react';
 import {
   View,
-  Image,
-  Text,
-  StyleSheet,
-  ViewStyle,
   ImageSourcePropType,
 } from 'react-native';
+import { YStack, Image, Text, XStack } from 'tamagui';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useTheme } from '../../theme/ThemeContext';
-import { theme } from '../../theme';
 
 export interface AvatarProps {
   source?: ImageSourcePropType | string;
@@ -17,7 +12,6 @@ export interface AvatarProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   status?: 'online' | 'offline' | 'busy';
   verified?: boolean;
-  style?: ViewStyle;
 }
 
 export const Avatar: React.FC<AvatarProps> = memo(({
@@ -26,11 +20,7 @@ export const Avatar: React.FC<AvatarProps> = memo(({
   size = 'md',
   status,
   verified,
-  style,
 }) => {
-  const { isDark } = useTheme();
-  const styles = createStyles(isDark);
-
   const getInitials = (name: string) => {
     const names = name.split(' ');
     if (names.length >= 2) {
@@ -40,165 +30,89 @@ export const Avatar: React.FC<AvatarProps> = memo(({
   };
 
   const imageSource = typeof source === 'string' ? { uri: source } : source;
+  
+  const sizes = {
+    sm: { width: 32, height: 32, fontSize: '$2', iconSize: 12, badgeSize: 16 },
+    md: { width: 48, height: 48, fontSize: '$3', iconSize: 16, badgeSize: 20 },
+    lg: { width: 64, height: 64, fontSize: '$5', iconSize: 20, badgeSize: 24 },
+    xl: { width: 96, height: 96, fontSize: '$7', iconSize: 24, badgeSize: 32 },
+  };
+
+  const statusColors = {
+    online: '$success',
+    offline: '$silver',
+    busy: '$warning',
+  };
+
+  const currentSize = sizes[size];
 
   return (
-    <View style={[styles[size], style]}>
+    <YStack 
+      position="relative" 
+      width={currentSize.width} 
+      height={currentSize.height}
+      borderRadius={currentSize.width / 2}
+      backgroundColor="$backgroundSoft"
+      overflow="hidden"
+    >
       {source ? (
-        <Image source={imageSource} style={[styles.image, styles[size]]} />
+        <Image 
+          source={imageSource} 
+          width="100%"
+          height="100%"
+          borderRadius={currentSize.width / 2}
+          resizeMode="cover"
+        />
       ) : (
-        <View style={[styles.placeholder, styles[size]]}>
-          <Text style={[styles.initials, styles[`${size}Text`]]}>
+        <YStack 
+          width="100%"
+          height="100%"
+          backgroundColor="$labPurple"
+          alignItems="center"
+          justifyContent="center"
+          borderRadius={currentSize.width / 2}
+        >
+          <Text fontSize={currentSize.fontSize} fontWeight="600" color="$whiteCoat">
             {name ? getInitials(name) : '?'}
           </Text>
-        </View>
+        </YStack>
       )}
 
       {status && (
-        <View style={[styles.status, styles[`${size}Status`], styles[`${status}Status`]]} />
+        <YStack
+          position="absolute"
+          bottom={0}
+          right={0}
+          width={size === 'sm' ? 8 : size === 'md' ? 12 : size === 'lg' ? 16 : 20}
+          height={size === 'sm' ? 8 : size === 'md' ? 12 : size === 'lg' ? 16 : 20}
+          backgroundColor={statusColors[status]}
+          borderRadius={10}
+          borderWidth={2}
+          borderColor="$background"
+        />
       )}
 
       {verified && (
-        <View style={[styles.verifiedBadge, styles[`${size}Badge`]]}>
+        <YStack
+          position="absolute"
+          bottom={size === 'sm' || size === 'md' ? -2 : -4}
+          right={size === 'sm' || size === 'md' ? -2 : -4}
+          width={currentSize.badgeSize}
+          height={currentSize.badgeSize}
+          backgroundColor="$labPurple"
+          borderRadius={currentSize.badgeSize / 2}
+          alignItems="center"
+          justifyContent="center"
+        >
           <MaterialIcons 
             name="verified" 
-            size={size === 'sm' ? 12 : size === 'md' ? 16 : size === 'lg' ? 20 : 24} 
-            color={theme.colors.white} 
+            size={currentSize.iconSize} 
+            color="white" 
           />
-        </View>
+        </YStack>
       )}
-    </View>
+    </YStack>
   );
-});
-
-const createStyles = (isDark: boolean) => StyleSheet.create({
-  image: {
-    borderRadius: 9999,
-    backgroundColor: theme.colors.gray[100],
-  },
-  
-  placeholder: {
-    borderRadius: 9999,
-    backgroundColor: theme.colors.primary.main,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  
-  initials: {
-    color: theme.colors.white,
-    fontWeight: theme.fontWeight.semibold,
-  },
-  
-  // Sizes
-  sm: {
-    width: 32,
-    height: 32,
-  },
-  md: {
-    width: 48,
-    height: 48,
-  },
-  lg: {
-    width: 64,
-    height: 64,
-  },
-  xl: {
-    width: 96,
-    height: 96,
-  },
-  
-  // Text sizes
-  smText: {
-    fontSize: theme.fontSize.xs,
-  },
-  mdText: {
-    fontSize: theme.fontSize.sm,
-  },
-  lgText: {
-    fontSize: theme.fontSize.lg,
-  },
-  xlText: {
-    fontSize: theme.fontSize['2xl'],
-  },
-  
-  // Status indicator
-  status: {
-    position: 'absolute',
-    borderWidth: 2,
-    borderColor: isDark ? theme.colors.dark.background : theme.colors.white,
-    borderRadius: 9999,
-  },
-  
-  // Status sizes
-  smStatus: {
-    width: 8,
-    height: 8,
-    bottom: 0,
-    right: 0,
-  },
-  mdStatus: {
-    width: 12,
-    height: 12,
-    bottom: 0,
-    right: 0,
-  },
-  lgStatus: {
-    width: 16,
-    height: 16,
-    bottom: 2,
-    right: 2,
-  },
-  xlStatus: {
-    width: 20,
-    height: 20,
-    bottom: 4,
-    right: 4,
-  },
-  
-  // Status colors
-  onlineStatus: {
-    backgroundColor: theme.colors.success,
-  },
-  offlineStatus: {
-    backgroundColor: theme.colors.gray[500],
-  },
-  busyStatus: {
-    backgroundColor: theme.colors.warning,
-  },
-  
-  // Verified badge
-  verifiedBadge: {
-    position: 'absolute',
-    backgroundColor: theme.colors.primary.main,
-    borderRadius: 9999,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  
-  // Badge sizes
-  smBadge: {
-    width: 16,
-    height: 16,
-    bottom: -2,
-    right: -2,
-  },
-  mdBadge: {
-    width: 20,
-    height: 20,
-    bottom: -2,
-    right: -2,
-  },
-  lgBadge: {
-    width: 24,
-    height: 24,
-    bottom: -2,
-    right: -2,
-  },
-  xlBadge: {
-    width: 32,
-    height: 32,
-    bottom: -4,
-    right: -4,
-  },
 });
 
 Avatar.displayName = 'Avatar';
