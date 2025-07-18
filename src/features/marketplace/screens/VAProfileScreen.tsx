@@ -449,15 +449,15 @@ export default function VAProfileScreen() {
                     </Text>
                     <XStack flexWrap="wrap" gap="$2">
                       {va.languages.map((language, index) => (
-                        <Badge
-                          key={index}
-                          backgroundColor="rgba(107, 70, 229, 0.1)"
-                          color="$labPurple"
-                          size="md"
-                        >
-                          <Globe size={14} />
-                          {language}
-                        </Badge>
+                        <XStack key={index} alignItems="center" gap="$1">
+                          <Badge
+                            backgroundColor="rgba(107, 70, 229, 0.1)"
+                            color="$labPurple"
+                            size="md"
+                          >
+                            {language}
+                          </Badge>
+                        </XStack>
                       ))}
                     </XStack>
                   </YStack>
@@ -469,15 +469,15 @@ export default function VAProfileScreen() {
                     </Text>
                     <XStack flexWrap="wrap" gap="$2">
                       {va.availability_calendar.availableSlots.map((slot, index) => (
-                        <Badge
-                          key={index}
-                          backgroundColor="rgba(16, 244, 177, 0.1)"
-                          color="$plasmaGreen"
-                          size="md"
-                        >
-                          <Clock size={14} />
-                          {slot}
-                        </Badge>
+                        <XStack key={index} alignItems="center" gap="$1">
+                          <Badge
+                            backgroundColor="rgba(16, 244, 177, 0.1)"
+                            color="$plasmaGreen"
+                            size="md"
+                          >
+                            {slot}
+                          </Badge>
+                        </XStack>
                       ))}
                     </XStack>
                   </YStack>
@@ -744,10 +744,12 @@ export default function VAProfileScreen() {
                               {cert.name}
                             </Text>
                             {cert.verified && (
-                              <Badge backgroundColor="$plasmaGreen" color="$carbonBlack" size="sm">
-                                <Shield size={12} />
-                                Verified
-                              </Badge>
+                              <XStack alignItems="center" gap="$1">
+                                <Shield size={12} color="#10F4B1" />
+                                <Badge backgroundColor="$plasmaGreen" color="$carbonBlack" size="sm">
+                                  Verified
+                                </Badge>
+                              </XStack>
                             )}
                           </XStack>
                           <Text fontSize="$3" color="$labPurple" fontWeight="500" marginBottom="$1">

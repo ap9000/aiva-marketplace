@@ -5,6 +5,7 @@ import ProfileScreen from '../../features/profile/screens/ProfileScreen';
 import EditProfileScreen from '../../features/profile/screens/EditProfileScreen';
 import SettingsScreen from '../../features/profile/screens/SettingsScreen';
 import HelpScreen from '../../features/profile/screens/HelpScreen';
+import BillingScreen from '../../features/billing/screens/BillingScreen';
 import { useTheme } from '../../theme/ThemeContext';
 
 const Stack = createStackNavigator<ProfileStackParamList>();
@@ -49,6 +50,11 @@ export default function ProfileNavigator() {
         name="Help" 
         component={HelpScreen}
         options={{ title: 'Help & Support' }}
+      />
+      <Stack.Screen 
+        name="Billing" 
+        component={BillingScreen}
+        options={{ title: 'Billing & Payments' }}
       />
     </Stack.Navigator>
   );

@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { MessagingStackParamList } from '../types';
 import ConversationsScreen from '../../features/messaging/screens/ConversationsScreen';
 import ChatScreen from '../../features/messaging/screens/ChatScreen';
+import NotificationsScreen from '../../features/notifications/screens/NotificationsScreen';
 import { useTheme } from '../../theme/ThemeContext';
 
 const Stack = createStackNavigator<MessagingStackParamList>();
@@ -37,6 +38,11 @@ export default function MessagingNavigator() {
         name="Chat" 
         component={ChatScreen}
         options={({ route }) => ({ title: route.params.recipientName })}
+      />
+      <Stack.Screen 
+        name="Notifications" 
+        component={NotificationsScreen}
+        options={{ title: 'Notifications' }}
       />
     </Stack.Navigator>
   );

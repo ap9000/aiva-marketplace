@@ -347,10 +347,12 @@ export default function ProfileScreen() {
                       {mockUser.name}
                     </H2>
                     {mockUser.isVerified && (
-                      <Badge backgroundColor="$plasmaGreen" color="$carbonBlack">
-                        <CheckCircle size={14} />
-                        Verified
-                      </Badge>
+                      <XStack alignItems="center" gap="$1">
+                        <CheckCircle size={14} color="#10F4B1" />
+                        <Badge backgroundColor="$plasmaGreen" color="$carbonBlack">
+                          Verified
+                        </Badge>
+                      </XStack>
                     )}
                   </XStack>
                   

@@ -22,7 +22,7 @@ export type AuthStackParamList = {
 export type MainTabParamList = {
   Home: NavigatorScreenParams<HomeStackParamList>;
   Search: NavigatorScreenParams<SearchStackParamList>;
-  Add: undefined;
+  Projects: NavigatorScreenParams<ProjectStackParamList>;
   Messages: NavigatorScreenParams<MessagingStackParamList>;
   Profile: NavigatorScreenParams<ProfileStackParamList>;
 };
@@ -41,10 +41,19 @@ export type SearchStackParamList = {
   VAProfile: { vaId: string };
 };
 
+// Project Stack
+export type ProjectStackParamList = {
+  ProjectDashboard: undefined;
+  ProjectPosting: undefined;
+  ProjectDetail: { projectId: string };
+  TeamManagement: undefined;
+};
+
 // Messaging Stack
 export type MessagingStackParamList = {
   Conversations: undefined;
   Chat: { conversationId: string; recipientName: string };
+  Notifications: undefined;
 };
 
 // Profile Stack
@@ -53,4 +62,5 @@ export type ProfileStackParamList = {
   EditProfile: undefined;
   Settings: undefined;
   Help: undefined;
+  Billing: undefined;
 };

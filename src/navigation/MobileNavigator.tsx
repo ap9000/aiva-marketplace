@@ -5,9 +5,9 @@ import { useTheme } from '../theme/ThemeContext';
 import { MainTabParamList } from './types';
 import HomeNavigator from './stacks/HomeNavigator';
 import SearchNavigator from './stacks/SearchNavigator';
+import ProjectNavigator from './stacks/ProjectNavigator';
 import MessagingNavigator from './stacks/MessagingNavigator';
 import ProfileNavigator from './stacks/ProfileNavigator';
-import AddScreen from '../features/marketplace/screens/AddScreen';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
@@ -27,8 +27,8 @@ export default function MainNavigator() {
             case 'Search':
               iconName = 'search';
               break;
-            case 'Add':
-              iconName = 'add-circle';
+            case 'Projects':
+              iconName = 'folder';
               break;
             case 'Messages':
               iconName = 'message';
@@ -60,13 +60,7 @@ export default function MainNavigator() {
     >
       <Tab.Screen name="Home" component={HomeNavigator} />
       <Tab.Screen name="Search" component={SearchNavigator} />
-      <Tab.Screen 
-        name="Add" 
-        component={AddScreen}
-        options={{
-          tabBarLabel: 'Post',
-        }}
-      />
+      <Tab.Screen name="Projects" component={ProjectNavigator} />
       <Tab.Screen name="Messages" component={MessagingNavigator} />
       <Tab.Screen name="Profile" component={ProfileNavigator} />
     </Tab.Navigator>

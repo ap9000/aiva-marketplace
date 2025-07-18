@@ -4,6 +4,8 @@ import { YStack, XStack, Text, H1, H2, H3, Paragraph } from 'tamagui';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import { Badge } from '../../../components/ui/badge';
+import { StatusAvatar } from '../../../components/ui/status-avatar';
+import { ProgressBar } from '../../../components/ui/progress-bar';
 import { useNavigation } from '@react-navigation/native';
 import { useResponsive } from '../../../shared/hooks/useResponsive';
 import { 
@@ -17,7 +19,14 @@ import {
   MoreHorizontal,
   Award,
   Calendar,
-  TestTube
+  TestTube,
+  Users,
+  UserPlus,
+  Heart,
+  MapPin,
+  Globe,
+  DollarSign,
+  Briefcase
 } from 'lucide-react-native';
 import Animated, {
   FadeIn,
@@ -201,105 +210,119 @@ const TeamMemberCard = ({ member, index }: { member: TeamMember; index: number }
         backgroundColor="$whiteCoat"
         borderColor="$titanium"
         borderWidth={1}
-        padding="$6"
+        padding="$4"
         marginBottom="$4"
         hoverStyle={{
           borderColor: '$labPurple',
           shadowColor: '$labPurple',
           shadowOpacity: 0.1,
-          shadowRadius: 12,
+          shadowRadius: 15,
         }}
         animation="quick"
       >
-        <CardContent>
-          {/* Header */}
-          <XStack alignItems="flex-start" justifyContent="space-between" marginBottom="$4">
-            <XStack alignItems="center" gap="$4" flex={1}>
-              <View style={{ position: 'relative' }}>
-                <View
-                  style={{
-                    width: 60,
-                    height: 60,
-                    borderRadius: 30,
-                    backgroundColor: '#E1E8ED',
-                    backgroundImage: `url(${member.avatar})`,
-                  }}
-                />
-                <View
-                  style={{
-                    position: 'absolute',
-                    bottom: 2,
-                    right: 2,
-                    width: 16,
-                    height: 16,
-                    borderRadius: 8,
-                    backgroundColor: member.status === 'active' ? '#10B981' : 
-                                   member.status === 'on-break' ? '#F59E0B' : '#6B7280',
-                    borderWidth: 2,
-                    borderColor: '#FFFFFF',
-                  }}
-                />
-              </View>
-              
-              <YStack flex={1}>
-                <XStack alignItems="center" gap="$2" marginBottom="$1">
-                  <H3 fontSize="$5" color="$carbonBlack">{member.name}</H3>
-                  <StatusBadge status={member.status} />
-                </XStack>
-                <Text fontSize="$3" color="$silver" marginBottom="$2">
-                  {member.role}
-                </Text>
-                <XStack alignItems="center" gap="$4">
-                  <XStack alignItems="center" gap="$1">
-                    <Star size={14} color="#F59E0B" fill="#F59E0B" />
-                    <Text fontSize="$3" fontWeight="500">{member.rating}</Text>
-                  </XStack>
-                  <XStack alignItems="center" gap="$1">
-                    <Clock size={14} color="#6B7280" />
-                    <Text fontSize="$3" color="$silver">{member.responseTime}</Text>
-                  </XStack>
-                  <XStack alignItems="center" gap="$1">
-                    <CheckCircle size={14} color="#10B981" />
-                    <Text fontSize="$3" color="$silver">{member.projectsCompleted} projects</Text>
-                  </XStack>
-                </XStack>
-              </YStack>
-            </XStack>
-
-            {/* Performance Chart */}
-            <YStack alignItems="center" gap="$2">
-              <PerformanceChart performance={member.performance} />
-              <Text fontSize="$2" color="$silver">Performance</Text>
-            </YStack>
-          </XStack>
-
-          {/* Stats Grid */}
-          <XStack gap="$4" marginBottom="$4" flexWrap="wrap">
-            <YStack alignItems="center" flex={1} minWidth={80}>
-              <Text fontSize="$5" fontWeight="bold" color="$labPurple">
-                {member.totalHours}h
+        {/* Header with photo and status */}
+        <XStack gap="$3" alignItems="center" marginBottom="$3">
+          <StatusAvatar 
+            name={member.name}
+            source={member.avatar ? { uri: member.avatar } : null}
+            size={64}
+            isOnline={member.status === 'active'}
+          />
+          
+          <YStack flex={1}>
+            <XStack alignItems="center" justifyContent="space-between">
+              <Text fontSize="$5" fontWeight="600" color="$carbonBlack">
+                {member.name}
               </Text>
-              <Text fontSize="$2" color="$silver">Total Hours</Text>
+              <XStack alignItems="center" gap="$2">
+                <StatusBadge status={member.status} />
+                <Pressable>
+                  <Heart 
+                    size={20} 
+                    color="#6B7280"
+                    fill="transparent"
+                  />
+                </Pressable>
+                <Pressable
+                  style={{
+                    padding: 4,
+                    borderRadius: 20,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <MoreHorizontal size={20} color="#6B7280" />
+                </Pressable>
+              </XStack>
+            </XStack>
+            
+            <Text fontSize="$3" color="$silver" marginBottom="$1">
+              {member.role}
+            </Text>
+            
+            <XStack alignItems="center" gap="$4">
+              <XStack alignItems="center" gap="$1">
+                <Star size={14} color="#F59E0B" fill="#F59E0B" />
+                <Text fontSize="$3" fontWeight="500" color="$carbonBlack">
+                  {member.rating.toFixed(1)}
+                </Text>
+                <Text fontSize="$3" color="$silver">
+                  (reviews)
+                </Text>
+              </XStack>
+              
+              <XStack alignItems="center" gap="$1">
+                <Clock size={14} color="#6B7280" />
+                <Text fontSize="$3" color="$silver">
+                  {member.responseTime}
+                </Text>
+              </XStack>
+              
+              <XStack alignItems="center" gap="$1">
+                <CheckCircle size={14} color="#10B981" />
+                <Text fontSize="$3" color="$silver">
+                  {member.projectsCompleted} projects
+                </Text>
+              </XStack>
+            </XStack>
+          </YStack>
+        </XStack>
+
+        {/* Performance Metrics */}
+        <Card backgroundColor="$backgroundSoft" padding="$3" marginBottom="$3">
+          <XStack justifyContent="space-around">
+            <YStack alignItems="center">
+              <Text fontSize="$2" color="$silver">Performance</Text>
+              <Text fontSize="$4" fontWeight="600" color="$labPurple">
+                {member.performance}%
+              </Text>
             </YStack>
-            <YStack alignItems="center" flex={1} minWidth={80}>
-              <Text fontSize="$5" fontWeight="bold" color="$plasmaGreen">
+            <YStack alignItems="center">
+              <Text fontSize="$2" color="$silver">Total Hours</Text>
+              <Text fontSize="$4" fontWeight="600" color="$labPurple">
+                {member.totalHours}
+              </Text>
+            </YStack>
+            <YStack alignItems="center">
+              <Text fontSize="$2" color="$silver">Hourly Rate</Text>
+              <Text fontSize="$4" fontWeight="600" color="$labPurple">
                 ${member.hourlyRate}
               </Text>
-              <Text fontSize="$2" color="$silver">Hourly Rate</Text>
             </YStack>
-            <YStack alignItems="center" flex={1} minWidth={80}>
-              <Text fontSize="$5" fontWeight="bold" color="$carbonBlack">
+            <YStack alignItems="center">
+              <Text fontSize="$2" color="$silver">Total Earned</Text>
+              <Text fontSize="$4" fontWeight="600" color="$labPurple">
                 ${member.totalEarned.toLocaleString()}
               </Text>
-              <Text fontSize="$2" color="$silver">Total Earned</Text>
             </YStack>
-            <YStack alignItems="center" flex={1} minWidth={80}>
-              <Text fontSize="$5" fontWeight="bold" color="$silver">
+            <YStack alignItems="center">
+              <Text fontSize="$2" color="$silver">Active Projects</Text>
+              <Text fontSize="$4" fontWeight="600" color="$labPurple">
                 {member.currentProjects.length}
               </Text>
-              <Text fontSize="$2" color="$silver">Active Projects</Text>
             </YStack>
           </XStack>
+        </Card>
 
           {/* Skills */}
           <YStack marginBottom="$4">
@@ -318,40 +341,54 @@ const TeamMemberCard = ({ member, index }: { member: TeamMember; index: number }
             </XStack>
           </YStack>
 
-          {/* Current Projects */}
-          {member.currentProjects.length > 0 && (
-            <YStack marginBottom="$4">
-              <Text fontSize="$3" color="$silver" marginBottom="$2">Current Projects:</Text>
-              <YStack gap="$1">
-                {member.currentProjects.map((project, idx) => (
-                  <Text key={idx} fontSize="$3" color="$labPurple">
-                    • {project}
+        {/* Current Projects */}
+        {member.currentProjects.length > 0 && (
+          <YStack marginBottom="$3">
+            <Text fontSize="$3" color="$silver" marginBottom="$2">Current Projects:</Text>
+            {member.currentProjects.map((project, idx) => (
+              <Card
+                key={idx}
+                backgroundColor="rgba(16, 244, 177, 0.05)"
+                borderColor="$plasmaGreen"
+                borderWidth={1}
+                padding="$3"
+                borderRadius="$3"
+                marginBottom="$2"
+              >
+                <XStack justifyContent="space-between" alignItems="center" marginBottom="$2">
+                  <Text fontSize="$4" fontWeight="500" color="$carbonBlack">
+                    {project}
                   </Text>
-                ))}
-              </YStack>
-            </YStack>
-          )}
+                  <Badge backgroundColor="$plasmaGreen" color="$carbonBlack" size="sm">
+                    Active
+                  </Badge>
+                </XStack>
+                <ProgressBar
+                  progress={85}
+                  color="#10F4B1"
+                  height={4}
+                />
+              </Card>
+            ))}
+          </YStack>
+        )}
 
-          {/* Actions */}
-          <XStack gap="$3" justifyContent="flex-end">
-            <Button variant="outline" size="sm">
-              <MessageCircle size={16} color="#6B46E5" />
-              Message
+        {/* Actions */}
+        <XStack gap="$2">
+          <Button flex={1} variant="outline" size="$3" borderColor="$titanium">
+            <MessageCircle size={16} />
+            Message
+          </Button>
+          {member.status === 'active' ? (
+            <Button flex={1} backgroundColor="$labPurple" size="$3">
+              View Profile
             </Button>
-            <Button variant="outline" size="sm">
-              <Calendar size={16} color="#6B46E5" />
-              Schedule
+          ) : (
+            <Button flex={1} backgroundColor="$plasmaGreen" color="$carbonBlack" size="$3">
+              Rehire
             </Button>
-            {member.status === 'inactive' && (
-              <Button size="sm" backgroundColor="$labPurple">
-                Rehire
-              </Button>
-            )}
-            <Pressable style={{ padding: 8 }}>
-              <MoreHorizontal size={20} color="#6B7280" />
-            </Pressable>
-          </XStack>
-        </CardContent>
+          )}
+        </XStack>
       </Card>
     </Animated.View>
   );
