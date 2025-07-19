@@ -62,12 +62,13 @@ const createStyles = (isDark: boolean) => StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: isDark ? theme.colors.dark.background : theme.colors.white,
+    backgroundColor: isDark ? '#0A0E1A' : '#FFFFFF',
+    minHeight: '100vh',
   },
   
   text: {
     marginTop: theme.spacing[2],
     fontSize: theme.fontSize.base,
-    color: isDark ? theme.colors.gray[300] : theme.colors.gray[700],
+    color: isDark ? '#F8FAFC' : '#0A0E1A',
   },
 });

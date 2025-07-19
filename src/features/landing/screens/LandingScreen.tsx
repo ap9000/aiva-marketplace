@@ -25,6 +25,8 @@ export default function LandingScreen() {
   const { isDesktop, isTablet } = useResponsive();
   const styles = createStyles(isDark, isDesktop, isTablet);
 
+  console.log('🏠 LandingScreen: Rendering with props:', { isDark, isDesktop, isTablet });
+
   const handleBrowseAsGuest = () => {
     dispatch(setGuestMode(true));
     navigation.navigate('Browse' as never);
